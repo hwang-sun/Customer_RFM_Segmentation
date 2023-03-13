@@ -511,7 +511,7 @@ model.fit(x_train, y_train)
     
     pred_option = st.selectbox(
       'How would you like to make prediction?',
-      ['Upload your own data', 'Input values']
+      ['Input values', 'Upload your own data']
     )
 
     with st.form("Predict form", clear_on_submit=True):
@@ -527,8 +527,8 @@ model.fit(x_train, y_train)
           if len(line_1) > 0:
             flag = 0
       elif pred_option == 'Input values':
-        recency = st.number_input('Days since your last purchase')
-        frequency = st.number_input('Total times you have made purchases')
+        recency = st.number_input('Days since your last purchase', format = '%d', step = 1)
+        frequency = st.number_input('Total times you have made purchases', format = '%d', step = 1)
         monetary = st.number_input('Total money you have spent ($)')
         new_df_2 = pd.DataFrame({
           'Recency' : recency,
@@ -539,7 +539,6 @@ model.fit(x_train, y_train)
         if len(line_2) > 0:
           flag = 1
     
-      robust_scaler = load_scaler('Clf_model/scaler.pkl')
       submitted = st.form_submit_button('Predict')
 
       if submitted:
