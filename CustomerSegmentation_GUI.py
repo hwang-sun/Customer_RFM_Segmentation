@@ -516,7 +516,7 @@ model.fit(x_train, y_train)
 
     with st.form("Predict form", clear_on_submit=True):
       if pred_option == 'Upload your own data':
-        st.warning('Your file should only contains 3 features: "Recency", "Frequency", and "Monetary value"',
+        st.warning('Your file should only contains 3 features: "Recency", "Frequency", and "Monetary"',
                   icon = '⚠')
         upload_file = st.file_uploader("Choose a csv file", 
                                       type = ['txt', 'csv'])
@@ -563,7 +563,7 @@ model.fit(x_train, y_train)
           y_pred = clf.predict(new_df)
           new_df['label'] = pd.Series(y_pred)
           st.dataframe(new_df.head())
-          st.download_button(label = 'Download predicted data', 
+          st.download_button(label = 'Download Data', 
                              data = new_df.to_csv(index=False),
                              file_name = 'predicted_data.csv',
                              mime = 'text/csv')
