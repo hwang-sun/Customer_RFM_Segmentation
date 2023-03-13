@@ -275,9 +275,7 @@ a dot-com company specializing in selling compact discs and music-related produc
 During the dot-com bubble period in 1998, the company was valued at over 1 trillion USD.''')
     st.write('''By performing Customer Segmentation, it's expected to assist marketers in personalizing advertisements, 
 communications, or designs according to customer segments, thereby improving the effectiveness of marketing campaigns.'''
-    
-    st.write()
-    
+        
     st.write('### III. About the Data')
     st.write('''This is internal data collected by the company from its first customers up to the end of June 1998, 
 including 69,659 transactions (observations) made by 23,570 customers.
