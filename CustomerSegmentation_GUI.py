@@ -429,15 +429,15 @@ df['K_label'] = pd.Series(labels)
       st.pyplot(qua_re_fig.figure)
     st.write('Kmeans clustering result convey 5 different clusters with following traits:')
     st.write(''' 
-    - (0) and (4): These two clusters show significant differences only in recency, with (0) being nearly 2 months and (4) being nearly 1 year. 
+- (0) and (4): These two clusters show significant differences only in recency, with (0) being nearly 2 months and (4) being nearly 1 year. 
 These two groups should be merged into one because they didn't show a strong bond with the business due to their low frequency, 
 and their spending per transaction. => Regular group
-    - (1): This group had low spending per transaction, low frequency of purchases, and has not made a purchase in 1.5 years. 
+- (1): This group had low spending per transaction, low frequency of purchases, and has not made a purchase in 1.5 years. 
 They were walk-in customers and have stopped buying from the business. => Left group
-    - (2): This was a potential group of customers with good spending per transaction and purchase frequency. 
+- (2): This was a potential group of customers with good spending per transaction and purchase frequency. 
 They also contributed over 20% of total revenue and was showing signs of leaving as they had not made a transaction in nearly 4 months. 
 This group needs nurturing and stimulated to consume. => Potential group
-    - (3): This group of customers was the most valuable with high spending per transaction, good purchase frequency, 
+- (3): This group of customers was the most valuable with high spending per transaction, good purchase frequency, 
 and still maintaining their spending habits with the business. Although they only accounted for 5% of the data set, 
 they contributed nearly 30% of total revenue. => Star group
     ''')
@@ -547,17 +547,13 @@ model.fit(x_train, y_train)
           '---'
           st.write('#### Prediction')
           new_df = new_df_2
-          x_scale = robust_scaler.transform(log_normalize(new_df))
-          st.write('Scaled dataframe')
-          st.dataframe(x_scale)
-          y_pred = clf.predict(x_scale)
+          y_pred = clf.predict(new_df)
           st.code("You belong to " + str(y_pred) + " group of customer") 
         else:
           '---'
           st.write('#### Prediction')
           new_df = new_df_1
-          x_scale = robust_scaler.transform(log_normalize(new_df))
-          y_pred = clf.predict(x_scale)
+          y_pred = clf.predict(new_df)
           new_df['label'] = pd.Series(y_pred)
           st.dataframe(new_df.head())
           st.download_button(label = 'Download predicted data', 
