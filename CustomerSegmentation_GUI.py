@@ -270,7 +270,7 @@ such as demographics, behavior, needs, or preferences. Customer segmentation is 
     st.image('customer-segmentation.jpg')
     
     st.write('### II. Problem Context')
-    st.wirte(''''Data used in this project was collected from CDNOW, 
+    st.wirte('''Data used in this project was collected from CDNOW, 
 a dot-com company specializing in selling compact discs and music-related products. It was founded in February 1994 by Jason Olim and officially dissolved in 2013. 
 During the dot-com bubble period in 1998, the company was valued at over 1 trillion USD.''')
     st.write('''By performing Customer Segmentation, it's expected to assist marketers in personalizing advertisements, 
