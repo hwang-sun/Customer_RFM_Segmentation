@@ -288,7 +288,7 @@ Data includes the following fields:''')
     - The dollar value of the transaction.''')
     CDnow_Master = load_csv_df('CDnow_MasterData.csv')
     st.dataframe(CDnow_Master.head())
-    st.download_button(label = "Download Data", data = CDnow_Master.to_csv(), 
+    st.download_button(label = "Download Data", data = CDnow_Master.to_csv(index=False), 
                        file_name = 'CDnow_MasterData.csv', mime = 'text/csv')
     
     st.write('### IV. Project Objective')
@@ -342,16 +342,16 @@ df_rfm = df_RFM.assign(R = r_groups.values, F = f_groups.values,  M = m_groups.v
       st.pyplot(qua_re_fig)
     st.write('Based on the result, The dataset was clustered into 4 different groups with following characteristics:')
     st.write('''    
-    - Left: The data shows that this group has not made any purchases from the company for almost 1.5 years. 
+- Left: The data shows that this group has not made any purchases from the company for almost 1.5 years. 
 Eventhough they represent the largest proportion in the dataset, their revenue contribution is relatively low (15%). 
 This group also shows low purchase frequency (average only 1 purchase) and low spending per transaction (average $35/transaction).
-    - Regular: This group represents 20% of the whole dataset, and its contribution to the total revenue was 15% (equal to the Left group). 
+- Regular: This group represents 20% of the whole dataset, and its contribution to the total revenue was 15% (equal to the Left group). 
 It also showed a long time gap between purchases (on average, almost 1 year since their last purchase), and low purchase frequency (average 2 purchases), 
 along with low spending per transaction (average $68/transaction).
-    - Leaving: This group has good purchase frequency (average 6 purchases) and high spending per transaction (average $256/transaction), 
+- Leaving: This group has good purchase frequency (average 6 purchases) and high spending per transaction (average $256/transaction), 
 indicating that they have potential for revenue growth. However, they are showing signs of leaving the company as the average time 
 since their last purchase is almost 300 days. The company needs to implement marketing strategies to retain this group of potential customers.
-    - Loyal: This group generated the most revenue for the company (almost 60% of total revenue) while only accounted for 20% of the total observations. 
+- Loyal: This group generated the most revenue for the company (almost 60% of total revenue) while only accounted for 20% of the total observations. 
 They also exhibit the best purchasing behavior with good purchase frequency (average 8 purchases) and high revenue per transaction (average $295/transaction).
     ''')
 elif choice == 'Kmeans Clustering':
@@ -561,6 +561,6 @@ model.fit(x_train, y_train)
           new_df['label'] = pd.Series(y_pred)
           st.dataframe(new_df.head())
           st.download_button(label = 'Download predicted data', 
-                             data = new_df,
-                             file_name = 'predicted_data',
+                             data = new_df.to_csv(index=False),
+                             file_name = 'predicted_data.csv',
                              mime = 'text/csv')
