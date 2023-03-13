@@ -555,7 +555,7 @@ model.fit(x_train, y_train)
             y = 'Leaving'
           else:
             y = 'Loyal'
-          st.code("You belong to " + y + " group of customer") 
+          st.code("You belong to the " + y + " group of customer") 
         else:
           '---'
           st.write('#### Prediction')
