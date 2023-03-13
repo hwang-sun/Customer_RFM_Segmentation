@@ -25,22 +25,15 @@ rfm_df = load_csv_df(df = 'RFM_data.csv')
 
 # customer labeling
 def rfm_label(df):
-  if df.F == 1 or df.F==2 or df.F == 3:
-    if (df.R == 1 or df.R == 2) and (df.M == 1 or df.M==2 or df.M == 3 or df.M == 4):
-      return "Lost"
-    elif df.R == 3 or df.R == 4 and (df.M == 1 or df.M==2 or df.M == 3 or df.M == 4):
-      return "Regular"
-    elif (df.R == 3 or df.R == 4) and df.M == 4:
-      return "Potential"
+  if df.R == 1 or df.R == 2:
+    return "Left"
+  elif (df.R == 3 or df.R == 4) and df.F != 4:
+    return "Regular"
+  elif (df.R == 3) and df.F == 4 and df.M == 4:
+    return "Leaving"
   else:
-    if (df.R == 1 or df.R == 2) and (df.M == 1 or df.M==2 or df.M == 3 or df.M == 4):
-      return "Lost"
-    elif df.R == 3 and (df.M == 1 or df.M == 2 or df.M == 3 or df.M == 4):
-      return 'Treat'
-    elif df.R == 4 and (df.M == 1 or df.M == 2 or df.M == 3):
-      return "Loyal"
-    elif df.R == 4 and df.M == 4:
-      return "VIP"
+    return "Loyal"
+
 @st.cache_data
 def rfm_labeling(rfm_df):
   rfm_df['RFM_label'] = rfm_df.apply(rfm_label, axis=1)
@@ -114,6 +107,21 @@ def qua_rev_plot(df, label, palette_1, palette_2):
   plt.tight_layout()
   return qua_re_fig
 #--------------------------------- KMeans Clustering -----------------------------------
+def labeling(df):
+  if df['K_label'] == 1:
+    return "Left"
+  elif df['K_label'] == 2:
+    return "Potential"
+  elif df['K_label'] == 3:
+    return "Star"
+  else:
+    return "Regular"
+@st.cache_data
+def k_labeling(df):
+  k_df = df.copy()
+  k_df['label'] = k_df.apply(labeling, axis = 1)
+  return k_df
+
 @st.cache_data
 def extract_cols(df, col_lst):
   new_df = rfm_df[col_lst]
@@ -205,23 +213,23 @@ def df_aggregation(df, label, agg_dict):
   df_agg = df_agg.reset_index()
   return df_agg
 #------------------------ CLUSTERING WHOLE NEW FILE FROM USER --------------------------
-# load scaler
-@st.cache(allow_output_mutation=True)
-def load_scaler(scaler_name):
-  with open(scaler_name, 'rb') as f:
-    scaler = pickle.load(f)
-  return scaler
+# # load scaler
+# @st.cache(allow_output_mutation=True)
+# def load_scaler(scaler_name):
+#   with open(scaler_name, 'rb') as f:
+#     scaler = pickle.load(f)
+#   return scaler
 
-# log normalization
-@st.cache_data
-def log_normalize(df):
-  log_features = df.copy()
-  log_features['R_log'] = np.log1p(log_features['Recency'])
-  log_features['F_log'] = np.log1p(log_features['Frequency'])
-  log_features['M_log'] = np.log1p(log_features['Monetary'])
-  col_names = ['R_log', 'F_log','M_log']
-  log_df = log_features[col_names]
-  return log_df 
+# # log normalization
+# @st.cache_data
+# def log_normalize(df):
+#   log_features = df.copy()
+#   log_features['R_log'] = np.log1p(log_features['Recency'])
+#   log_features['F_log'] = np.log1p(log_features['Frequency'])
+#   log_features['M_log'] = np.log1p(log_features['Monetary'])
+#   col_names = ['R_log', 'F_log','M_log']
+#   log_df = log_features[col_names]
+#   return log_df 
 
 # load model
 @st.cache(allow_output_mutation=True)
@@ -237,15 +245,17 @@ st.title('Customer Segmentation Project')
 #create a navigation menu
 with st.sidebar:
   choice = option_menu(
-      options = ['Business Objective', 'RFM Analysis','Kmeans Clustering', 'New Prediction'],
+      options = ['Introduction', 'RFM Analysis','Kmeans Clustering', 'New Prediction'],
       menu_title = 'Main Menu',
       icons = ['bullseye', 'bar-chart', 'robot', 'file-plus'],
       menu_icon = [None])
 
-if choice == "Business Objective":
-    st.write('## Business Objective')
+if choice == "Introduction":
+    st.write('## Introduction')
     '---'
-    st.write("Customer segmentation is the process of dividing a company's customers into smaller groups based on similar characteristics, such as demographics, behavior, needs, or preferences. Customer segmentation is important for several reasons:")
+    st.write('### I. What is Customer Segmentation?')
+    st.write('''Customer segmentation is the process of dividing a company's customers into smaller groups based on similar characteristics, 
+such as demographics, behavior, needs, or preferences. Customer segmentation is important for several reasons:''')
     st.write(
       '''
 1. Better understanding of customers: 
@@ -258,6 +268,32 @@ if choice == "Business Objective":
   By focusing on the most profitable customer segments, companies can increase their profitability.
     ''')
     st.image('customer-segmentation.jpg')
+    
+    st.write('### II. Problem Context')
+    st.wirte(''''Data used in this project was collected from CDNOW, 
+a dot-com company specializing in selling compact discs and music-related products. It was founded in February 1994 by Jason Olim and officially dissolved in 2013. 
+During the dot-com bubble period in 1998, the company was valued at over 1 trillion USD.''')
+    st.write('''By performing Customer Segmentation, it's expected to assist marketers in personalizing advertisements, 
+communications, or designs according to customer segments, thereby improving the effectiveness of marketing campaigns.'''
+    
+    st.write()
+    
+    st.write('### III. About the Data')
+    st.write('''This is internal data collected by the company from its first customers up to the end of June 1998, 
+including 69,659 transactions (observations) made by 23,570 customers.
+
+It includes the following fields:''')
+    st.write('''
+    - Customer ID
+    - Date of transaction
+    - The number of CDs purchased
+    - The dollar value of the transaction.''')
+    CDnow_Master = load_csv_df('CDnow_MasterData.csv')
+    st.dataframe(CDnow_Master.head())
+    st.download_button(label = "Download Data", data = CDnow_Master, 
+                       file_name = 'CDnow_MasterData' mime = 'text/csv)
+    
+    st.write('### IV. Project Objective')
     st.write('In this project, I perform segmenting customers based on 3 main factors:')
     st.write('''
 - Recency: The last time a customer made a purchase.
@@ -268,7 +304,7 @@ if choice == "Business Objective":
 elif choice == 'RFM Analysis':
     st.write("## RFM Analysis")
     '---'
-    st.write('### I. About The Data:')
+    st.write('### I. About The Data')
     
     st.write('''The data used for analysis including 3 main features: "Recency", "Frequency", "Monetary Value"
              . The "R", "F", "M" features were engineered by calculating quantile for each feature.''')
@@ -292,7 +328,7 @@ df_rfm = df_RFM.assign(R = r_groups.values, F = f_groups.values,  M = m_groups.v
       'Monetary' : ['mean', 'count']})
     st.dataframe(rfm_agg)
     
-    st.write('### II. RFM Result:')
+    st.write('### II. RFM Result')
     rfm_result = st.radio(
       "Choose graph to observe",
       ['Bubble plot by RFM mean of each cluster', 'Scatter plot of customer groups', 'Clusters by quantity and revenue contribution']
@@ -306,17 +342,20 @@ df_rfm = df_RFM.assign(R = r_groups.values, F = f_groups.values,  M = m_groups.v
     elif rfm_result == 'Clusters by quantity and revenue contribution':
       qua_re_fig = qua_rev_plot(df = rfm_df, label = 'RFM_label', palette_1 = 'Spectral', palette_2 = 'Blues')
       st.pyplot(qua_re_fig)
-    st.write('Based on the result, The dataset was clustered into 5 different groups with following characteristics:')
-    st.write('''
-      - VIP : this group of customer bring the highest value to the company as they purchased very frequently with the mean of revenue for each transaction was $338, and still remain buying products over the past 2 months. Eventhough they only accounted for 14.7% of the total number of customers, over 50% revenue was from this group.
-      - Loyal : this cluster represent for customers who purchased frequently and remained purchasing for the last few months. However, though they're considered to be loyalty, their revenue attribution was the lowest - about 5%.
-      - Treat : the customers in this group had high mean of sale per transaction with the average frequency of buying is 5. Nevertheless, this group was saw to gradually leaving as it'd been approximately a year since their last purchase.
-      - Regular : this type of customers represented for over 25% of the total number and their revenue attribution was less than 20%. They rarely made a purchase and had a high Recency mean.
-      - Lost : customers from this group no longer bought products from the company as their frequency was low and it's over 1 and a half year since their last purchased.
+    st.write('Based on the result, The dataset was clustered into 4 different groups with following characteristics:')
+    st.write('''    
+    - Left: The data shows that this group has not made any purchases from the company for almost 1.5 years. 
+Eventhough they represent the largest proportion in the dataset, their revenue contribution is relatively low (15%). 
+This group also shows low purchase frequency (average only 1 purchase) and low spending per transaction (average $35/transaction).
+    - Regular: This group represents 20% of the whole dataset, and its contribution to the total revenue was 15% (equal to the Left group). 
+It also showed a long time gap between purchases (on average, almost 1 year since their last purchase), and low purchase frequency (average 2 purchases), 
+along with low spending per transaction (average $68/transaction).
+    - Leaving: This group has good purchase frequency (average 6 purchases) and high spending per transaction (average $256/transaction), 
+indicating that they have potential for revenue growth. However, they are showing signs of leaving the company as the average time 
+since their last purchase is almost 300 days. The company needs to implement marketing strategies to retain this group of potential customers.
+    - Loyal: This group generated the most revenue for the company (almost 60% of total revenue) while only accounted for 20% of the total observations. 
+They also exhibit the best purchasing behavior with good purchase frequency (average 8 purchases) and high revenue per transaction (average $295/transaction).
     ''')
-    
-    
-
 elif choice == 'Kmeans Clustering':
     st.write('## Kmeans Clusering')
     '---'
@@ -390,11 +429,19 @@ df['K_label'] = pd.Series(labels)
     elif kmeans_result == 'Clusters by quantity and revenue contribution':
       qua_re_fig = qua_rev_plot(df = k_df, label = 'K_label', palette_1='crest', palette_2='flare')
       st.pyplot(qua_re_fig.figure)
-    st.write('The result of Kmeans Clustering does not seem to be very appropriate as following reasons:')
-    st.write('''
-- Groups only show the differences in Recency and Frequency, but not revenue contribution (the most important factor)
-- Eventhough group 4 accounted for more than 50% of the total customer's quanitty, their total revenue was only about 15% whereas they're expected to be the most valuable customer cluster (as in the bubble chart)
-- it's hardly explained the differences in characteristics of these groups whcich would result in uneffective business strategy for each one.
+    st.write('Kmeans clustering result convey 5 different clusters with following traits:')
+    st.write(''' 
+    - (0) and (4): These two clusters show significant differences only in recency, with (0) being nearly 2 months and (4) being nearly 1 year. 
+These two groups should be merged into one because they didn't show a strong bond with the business due to their low frequency, 
+and their spending per transaction. => Regular group
+    - (1): This group had low spending per transaction, low frequency of purchases, and has not made a purchase in 1.5 years. 
+They were walk-in customers and have stopped buying from the business. => Left group
+    - (2): This was a potential group of customers with good spending per transaction and purchase frequency. 
+They also contributed over 20% of total revenue and was showing signs of leaving as they had not made a transaction in nearly 4 months. 
+This group needs nurturing and stimulated to consume. => Potential group
+    - (3): This group of customers was the most valuable with high spending per transaction, good purchase frequency, 
+and still maintaining their spending habits with the business. Although they only accounted for 5% of the data set, 
+they contributed nearly 30% of total revenue. => Star group
     ''')
 else:
     st.write('## New Prediction')
@@ -406,9 +453,9 @@ so that we can assign suitable strategy for that customer.
 There were various models to tackle this problem so it's crucial to determine the most appropriate one for the current data set. 
 In order to do this, I perform cross validation with k-fold = 10 on accuracy score and performing time. Based on these 2 factos, I can then choose the fastest and most accurate model
     ''')
-    model_select = load_csv_df('Clf_model/Clf_select.csv')
-    st.dataframe(model_select)    
-    st.write('After decide that Decision Tree was the best model for the data set. I then perform Grid Search CV to get the best hyperparameters with the expection of increasing perfomance score.')
+    model_select = load_csv_df('Saved_models/Clf_select.csv')
+    st.dataframe(model_select.iloc[:, [0, 1, 3])    
+    st.write('After deciding that Decision Tree was the best model for the data set. I then perform Grid Search CV to get the best hyperparameters with the expection of increasing perfomance score.')
     st.code('''
 from sklearn.model_selection import GridSearchCV
 # Define the parameter grid to search
@@ -439,7 +486,7 @@ model = DecisionTreeClassifier(criterion = 'gini',
 model.fit(x_train, y_train)
     ''')
     # load model
-    clf = load_model('Clf_model/DC_clf.joblib')
+    clf = load_model('Saved_models/DC_rmf.joblib')
     
     # Model evaluation
     st.write('### II. Model Evaluation')
@@ -448,18 +495,18 @@ model.fit(x_train, y_train)
       ['Accuracy', 'Weighted Scores', 'Classification report', 'Confusion matrix']
     )
     if score_option == 'Accuracy':
-      score_df = load_csv_df('Clf_model/score_df.csv')
+      score_df = load_csv_df('Saved_models/score_df1.csv')
       st.dataframe(score_df)
       st.write('=> Model perform well and not being underfiting or overfiting')
     elif score_option == 'Weighted Scores':
-      score_df2 = load_csv_df('Clf_model/score_df2.csv')
-      st.dataframe(score_df2)
+      weighted_score = load_csv_df('Saved_models/weighted_score1.csv')
+      st.dataframe(weighted_score)
       st.write('=> Data is balanced and the model is not biased')
     elif score_option == 'Classification report':
-      report_df = load_csv_df('Clf_model/classification_report.csv')
+      report_df = load_csv_df('Saved_models/clf_report1.csv')
       st.dataframe(report_df)
     else:
-      st.image('Clf_model/confusion_matrix.png')
+      st.image('Saved_models/confusion_matrix1.png')
     
     # Making predictions
     st.write('### III. Making Predictions')
@@ -515,3 +562,7 @@ model.fit(x_train, y_train)
           y_pred = clf.predict(x_scale)
           new_df['label'] = pd.Series(y_pred)
           st.dataframe(new_df.head())
+          st.download_button(label = 'Download predicted data', 
+                             data = new_df,
+                             file_name = 'predicted_data',
+                             mime = 'text/csv')
