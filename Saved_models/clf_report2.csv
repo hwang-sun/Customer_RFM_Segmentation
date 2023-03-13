@@ -1,0 +1,5 @@
+,precision,recall,f1_score,support
+Left,0.98,0.99,0.99,257.0
+Regular,0.99,0.99,0.99,1472.0
+Potential,1.0,1.0,1.0,2563.0
+Star,0.98,0.96,0.97,398.0
