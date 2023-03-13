@@ -563,7 +563,8 @@ model.fit(x_train, y_train)
           y_pred = clf.predict(new_df)
           new_df['label'] = pd.Series(y_pred)
           st.dataframe(new_df.head())
-          st.download_button(label = 'Download Data', 
-                             data = new_df.to_csv(index=False),
-                             file_name = 'predicted_data.csv',
-                             mime = 'text/csv')
+    if flag == 0
+      st.download_button(label = 'Download Data', 
+                         data = new_df.to_csv(index=False),
+                         file_name = 'predicted_data.csv',
+                         mime = 'text/csv')
