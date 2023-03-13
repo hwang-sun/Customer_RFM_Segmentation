@@ -289,7 +289,7 @@ Data includes the following fields:''')
     CDnow_Master = load_csv_df('CDnow_MasterData.csv')
     st.dataframe(CDnow_Master.head())
     st.download_button(label = "Download Data", data = CDnow_Master.to_csv(), 
-                       file_name = 'CDnow_MasterData', mime = 'text/csv')
+                       file_name = 'CDnow_MasterData.csv', mime = 'text/csv')
     
     st.write('### IV. Project Objective')
     st.write('In this project, I perform segmenting customers based on 3 main factors:')
