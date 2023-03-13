@@ -280,7 +280,7 @@ communications, or designs according to customer segments, thereby improving the
     st.write('''This is internal data collected by the company from its first customers up to the end of June 1998, 
 including 69,659 transactions (observations) made by 23,570 customers.
 
-It includes the following fields:''')
+Data includes the following fields:''')
     st.write('''
     - Customer ID
     - Date of transaction
@@ -288,7 +288,7 @@ It includes the following fields:''')
     - The dollar value of the transaction.''')
     CDnow_Master = load_csv_df('CDnow_MasterData.csv')
     st.dataframe(CDnow_Master.head())
-    st.download_button(label = "Download Data", data = CDnow_Master, 
+    st.download_button(label = "Download Data", data = CDnow_Master.to_csv(), 
                        file_name = 'CDnow_MasterData', mime = 'text/csv')
     
     st.write('### IV. Project Objective')
