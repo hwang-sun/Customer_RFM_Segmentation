@@ -564,7 +564,7 @@ model.fit(x_train, y_train)
           new_df['label'] = pd.Series(y_pred)
           st.dataframe(new_df.head())
 
-     st.download_button(label = 'Download Data', 
+    st.download_button(label = 'Download Data', 
                         data = new_df.to_csv(index=False),
                         file_name = 'predicted_data.csv',
                         mime = 'text/csv')
