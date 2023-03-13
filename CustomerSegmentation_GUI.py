@@ -547,7 +547,15 @@ model.fit(x_train, y_train)
           st.write('#### Prediction')
           new_df = new_df_2
           y_pred = clf.predict(new_df)
-          st.code("You belong to " + str(y_pred) + " group of customer") 
+          if y_pred == 1:
+            y = 'Left'
+          elif y_pred == 2:
+            y = 'Regular'
+          elif y_pred == 3:
+            y = 'Leaving'
+          else:
+            y = 'Loyal'
+          st.code("You belong to " + y + " group of customer") 
         else:
           '---'
           st.write('#### Prediction')
