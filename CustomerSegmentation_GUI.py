@@ -467,7 +467,7 @@ plt.setp(ax2.get_xticklabels(), fontsize = 12)
 
 plt.show();
      ''')
-     st.image('image/EDA_two_bar.png')
+    st.image('image/EDA_two_bar.png')
 
     
     
