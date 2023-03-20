@@ -406,9 +406,16 @@ plt.show();
      ''')
      st.image('image/EDA_line.png)
   
+  elif eda_choice == 'purchased_quantity & sale':
+     st.image('image/EDA_dist.png')          
               
               
               
+              
+              
+              
+  elif eda_choice == 'customer_id & order_id':         
+     st.image('image/EDA_two_bar.png')
               
               
               
