@@ -247,7 +247,7 @@ with st.sidebar:
   choice = option_menu(
       options = ['Introduction', 'EDA & Preprocessing', 'RFM Analysis','Kmeans Clustering', 'New Prediction'],
       menu_title = 'Main Menu',
-      icons = ['bullseye', 'clipboard-pulse', 'bar-chart', 'robot', 'file-plus'],
+      icons = ['bullseye', 'file-code', 'bar-chart', 'robot', 'file-plus'],
       menu_icon = [None])
 
 if choice == "Introduction":
@@ -318,14 +318,22 @@ def missing_value(df):
         else:
             print(f"'{i}' has no missing values")
 
-missing_value(master_df)
-
+missing_value(master_df)''')
+  st.write(''' 
 Result:
   'customer_id' has no missing values
   'date' has no missing values
   'purchased_quantity' has no missing values
-  'sale' has no missing values''')
+  'sale' has no missing values
+  ''')
   st.code(''' print(f"Sum of duplicates: {master_df.duplicated().sum()}")''') 
+  st.write('Sum of duplicates: 255')
+  
+  
+  
+  
+  
+  
 elif choice == 'RFM Analysis':
     st.write("## RFM Analysis")
     '---'
