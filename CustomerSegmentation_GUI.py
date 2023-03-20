@@ -281,7 +281,7 @@ communications, or designs according to customer segments, thereby improving the
 including 69,659 transactions (observations) made by 23,570 customers.
 
 Data includes the following fields:''')
-    col1, col2 = st.column(2)
+    col1, col2 = st.columns(2)
     with col1:
       st.write('''
       - Customer ID
