@@ -364,10 +364,10 @@ for n in nondub_idx:
     df_new.loc[n, 'order_id'] = k
     k+=1
   ''')
-  st.write('''Now I start exploring data set variables'''
+  st.write('''Now I start exploring data set variables''')
   eda_choice = st.radio(
     'Choose variable to observe',
-      ['date & sale', 'purchased_quantity & sale', 'customer_id & order_id']
+     ['date & sale', 'purchased_quantity & sale', 'customer_id & order_id']
     )  
   if eda_choice == 'date & sale':
      st.code(''' 
