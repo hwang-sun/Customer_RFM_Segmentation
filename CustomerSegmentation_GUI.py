@@ -245,9 +245,9 @@ st.title('Customer Segmentation Project')
 #create a navigation menu
 with st.sidebar:
   choice = option_menu(
-      options = ['Introduction', 'RFM Analysis','Kmeans Clustering', 'New Prediction'],
+      options = ['Introduction', 'EDA & Preprocessing', 'RFM Analysis','Kmeans Clustering', 'New Prediction'],
       menu_title = 'Main Menu',
-      icons = ['bullseye', 'bar-chart', 'robot', 'file-plus'],
+      icons = ['bullseye', 'clipboard-pulse', 'bar-chart', 'robot', 'file-plus'],
       menu_icon = [None])
 
 if choice == "Introduction":
@@ -302,6 +302,41 @@ Data includes the following fields:''')
 - Monetary value: The total amount of money a customer has spent on purchases.
     ''')
     st.write("By using RFM analysis and Kmeans clustering algorithm on these 3 features, I expect to defferentiate customer groups' behaviors and values.")
+
+elif choice = 'EDA & Preprocessing':
+  st.write('## EDA & Preprocessing')
+  '---'
+  st.write('### I. Exploratory Data Analysis (EDA)')
+  st.write("Let's take a look at the general information about the data set")
+  st.code(''' 
+def missing_value(df):
+    columns = df.columns.values.tolist()
+    for i in columns:
+        s = df[i].isnull().sum()
+        if s > 0:
+            print(f"'{i}' has missing values: {s}")
+        else:
+            print(f"'{i}' has no missing values")
+
+missing_value(master_df)
+
+Result:
+  'customer_id' has no missing values
+  'date' has no missing values
+  'purchased_quantity' has no missing values
+  'sale' has no missing values''')
+   st.code(''' 
+# check for duplicates
+print(f"Sum of duplicates: {master_df.duplicated().sum()}")
+
+result:
+  Sum of duplicates: 255''')
+    
+    
+    
+    
+    
+    
 elif choice == 'RFM Analysis':
     st.write("## RFM Analysis")
     '---'
