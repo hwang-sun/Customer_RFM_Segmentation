@@ -326,7 +326,7 @@ Result:
   'purchased_quantity' has no missing values
   'sale' has no missing values''')
    st.code(''' 
-# check for duplicates
+check for duplicates
 print(f"Sum of duplicates: {master_df.duplicated().sum()}")
 
 result:
