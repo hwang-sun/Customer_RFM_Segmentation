@@ -318,14 +318,14 @@ def missing_value(df):
         else:
             print(f"'{i}' has no missing values")
 
-missing_value(master_df)''')
-   st.code(''' print(f"Sum of duplicates: {master_df.duplicated().sum()}")''')
-    
-    
-    
-    
-    
-    
+missing_value(master_df)
+
+Result:
+  'customer_id' has no missing values
+  'date' has no missing values
+  'purchased_quantity' has no missing values
+  'sale' has no missing values''')
+   st.code(''' print(f"Sum of duplicates: {master_df.duplicated().sum()}")''') 
 elif choice == 'RFM Analysis':
     st.write("## RFM Analysis")
     '---'
