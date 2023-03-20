@@ -15,7 +15,7 @@ import pickle
 from joblib import load
 
 #--------------------------------- RFM Analysis -------------------------------------
-
+plt.style.use('seaborn-whitegrid')
 # read RFM data
 @st.cache_data
 def load_csv_df(df):
