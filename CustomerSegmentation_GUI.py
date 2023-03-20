@@ -21,7 +21,7 @@ plt.style.use('seaborn-whitegrid')
 def load_csv_df(df):
   df =  pd.read_csv(df)
   return df
-rfm_df = load_csv_df(df = 'RFM_data.csv')    
+rfm_df = load_csv_df(df = 'data/RFM_data.csv')    
 
 # customer labeling
 def rfm_label(df):
@@ -267,7 +267,7 @@ such as demographics, behavior, needs, or preferences. Customer segmentation is 
 4. Increased profitability: 
   By focusing on the most profitable customer segments, companies can increase their profitability.
     ''')
-    st.image('customer-segmentation.jpg')
+    st.image('image/customer-segmentation.jpg')
     
     st.write('### II. Problem Context')
     st.write('''Data used in this project was collected from CDNOW, 
@@ -283,7 +283,7 @@ including 69,659 transactions (observations) made by 23,570 customers.
 Data includes the following fields:''')
     col1, col2 = st.columns([3,1])
     with col1:
-      CDnow_Master = load_csv_df('CDnow_MasterData.csv')
+      CDnow_Master = load_csv_df('data/CDnow_MasterData.csv')
       st.dataframe(CDnow_Master.head())
     with col2:
       st.write('''
@@ -334,7 +334,7 @@ Result:
   st.write('master_df spans from 1997-01-01 00:00:00 to 1998-06-30 00:00:00')
   st.write(''' 
 My goal in this section was to transform data into Recency, Frequency, and Monetary Value features for RFM analysis.
-In order to do that, I performed feature engineering and created order_od. The idea was that the same order_id will be
+In order to do that, I performed feature engineering and created order_id. The idea was that the same order_id will be
 assigned for any transaction (observation) have the same customer_id and purchased date.
   ''')
   st.code(''' 
@@ -364,10 +364,57 @@ for n in nondub_idx:
     df_new.loc[n, 'order_id'] = k
     k+=1
   ''')
+  st.write('''Now I start exploring data set variables'''
+  eda_choice = st.radio(
+    'Choose variable to observe',
+      ['date & sale', 'purchased_quantity & sale', 'customer_id & order_id']
+    )  
+  if eda_choice == 'date & sale':
+     st.code(''' 
+# sale of 2 years
+master_df['year'] = master_df.date.apply(lambda x: x.year)
+master_df['month'] = master_df.date.apply(lambda x: x.month)
+
+year_sale = pd.DataFrame({'year': [1997, 1998],
+                         'Total_sale': [round(master_df[master_df['year'] == 1997]['sale'].sum(), 2),
+                                       round(master_df[master_df['year'] == 1998]['sale'].sum(),2)]})
+plt.style.use('seaborn-whitegrid')
+fig = plt.figure(figsize = (10, 6))
+sns.barplot(data = year_sale, x='year', y='Total_sale')
+plt.title('Total sale between years', fontsize=15)
+plt.xlabel('Year', fontsize=12)
+plt.ylabel('Sale', fontsize = 12)
+plt.show();
+     ''')
+     st.image('image/EDA_bar.png')
+     st.code(''' 
+fig = plt.figure(figsize = (20, 6))
+
+plt.subplot(1,2,1)
+sns.lineplot(data = master_df[master_df['year'] == 1997], x='month', y='sale')
+plt.title('change of sale over month in 1997', fontsize=20)
+plt.xlabel('Month', fontsize=12)
+plt.ylabel('Sale', fontsize = 12)
+
+plt.subplot(1,2,2)
+sns.lineplot(data = master_df[master_df['year'] == 1998], x='month', y='sale')
+plt.title('change of sale over month in 1998', fontsize=20)
+plt.xlabel('Month', fontsize=12)
+plt.ylabel('Sale', fontsize = 12)
+
+plt.show();
+     ''')
+     st.image('image/EDA_line.png)
   
-  
-  
-  
+              
+              
+              
+              
+              
+              
+              
+              
+              
 elif choice == 'RFM Analysis':
     st.write("## RFM Analysis")
     '---'
