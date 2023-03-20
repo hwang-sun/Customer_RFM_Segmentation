@@ -309,7 +309,14 @@ elif choice == 'EDA & Preprocessing':
   st.write('### I. Exploratory Data Analysis (EDA)')
   st.write("Let's take a look at the general information about the data set")
   st.code('master_df.info()')
-  st.dataframe(master_df.info())
+  st.write(''' 
+ #   Column              Non-Null Count  Dtype         
+---  ------              --------------  -----         
+ 0   customer_id         69659 non-null  object        
+ 1   date                69659 non-null  datetime64[ns]
+ 2   purchased_quantity  69659 non-null  int32         
+ 3   sale                69659 non-null  float64  
+  ''')
   st.code(''' 
 def missing_value(df):
     columns = df.columns.values.tolist()
