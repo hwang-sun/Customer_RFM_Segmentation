@@ -325,7 +325,7 @@ Result:
   'date' has no missing values
   'purchased_quantity' has no missing values
   'sale' has no missing values''')
-   st.code(''' print(f"Sum of duplicates: {master_df.duplicated().sum()}")''') 
+  st.code(''' print(f"Sum of duplicates: {master_df.duplicated().sum()}")''') 
 elif choice == 'RFM Analysis':
     st.write("## RFM Analysis")
     '---'
