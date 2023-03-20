@@ -364,6 +364,7 @@ for n in nondub_idx:
     df_new.loc[n, 'order_id'] = k
     k+=1
   ''')
+  '---'
   st.write('''Now I start exploring data set variables''')
   eda_choice = st.radio(
     'Choose variable to observe',
@@ -404,9 +405,23 @@ plt.ylabel('Sale', fontsize = 12)
 
 plt.show();
      ''')
+      
      st.image('image/EDA_line.png')
   
   elif eda_choice == 'purchased_quantity & sale':
+     st.code('''
+# show distribution of both variables
+fig = plt.figure(figsize = (12, 5))
+plt.subplot(1,2,1)
+sns.histplot(master_df.purchased_quantity, bins=10, kde=True)
+plt.title('Purchased_Quantity Distribution', fontsize = 15)
+
+plt.subplot(1,2,2)
+sns.histplot(master_df.sale, kde=True)
+plt.title('Sale Distribution', fontsize = 15)
+
+plt.show();
+     ''')
      st.image('image/EDA_dist.png')          
               
               
@@ -414,14 +429,49 @@ plt.show();
               
               
               
-  elif eda_choice == 'customer_id & order_id':         
+  elif eda_choice == 'customer_id & order_id':
+    st.code(''' 
+# On average, how many times does a customer make a purchase?
+mean = master_df.groupby('customer_id')['order_id'].nunique().mean()
+std = master_df.groupby('customer_id')['order_id'].nunique().std()
+    ''')
+    st.write(''' 
+On average, a customer purchased 2.87 times, with standard deviation equal to 4.17
+    ''')
+     st.code(''' 
+# show the most frequent and the most spent customers
+top10_frequency = master_df.groupby('customer_id')['order_id'].nunique().sort_values(ascending=False)[:10]
+top10_sale = master_df.groupby('customer_id')['sale'].sum().sort_values(ascending=False)[:10]
+
+fig = plt.figure(figsize = (15, 10))
+plt.subplot(1,2,1)
+ax1 = sns.barplot(data = top10_frequency, 
+                    x=top10_frequency.index, y=top10_frequency.values.tolist(), 
+                    palette = 'Blues',
+                   orient = 'h')
+ax1.set_title('Top 10 Frequent Customers', fontsize = 18)
+yticks = top10_frequency.sort_values().index.tolist()
+ax1.set_yticklabels(yticks, fontsize = 12)
+ax1.set_xlabel('Purchased times', fontsize = 15)
+plt.setp(ax1.get_xticklabels(), fontsize = 12)
+
+plt.subplot(1,2,2)
+ax2 = sns.barplot(top10_sale, 
+                  x=top10_sale.index, y = top10_sale.values.tolist(), 
+                  orient = 'h', palette = 'Oranges')
+ax2.set_title('Top 10 Most-spent Customers', fontsize = 18)
+yticks = top10_sale.sort_values().index.tolist()
+ax2.set_yticklabels(yticks, fontsize = 12)
+ax2.set_xlabel('Sale', fontsize = 15)
+plt.setp(ax2.get_xticklabels(), fontsize = 12)
+
+plt.show();
+     ''')
      st.image('image/EDA_two_bar.png')
-              
-              
-              
-              
-              
-              
+
+    
+    
+    
 elif choice == 'RFM Analysis':
     st.write("## RFM Analysis")
     '---'
