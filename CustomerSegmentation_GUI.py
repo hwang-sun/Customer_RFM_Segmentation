@@ -321,10 +321,10 @@ def missing_value(df):
 missing_value(master_df)''')
   st.write(''' 
 Result:
-  'customer_id' has no missing values
-  'date' has no missing values
-  'purchased_quantity' has no missing values
-  'sale' has no missing values
+  - 'customer_id' has no missing values
+  - 'date' has no missing values
+  - 'purchased_quantity' has no missing values
+  - 'sale' has no missing values
   ''')
   st.code(''' print(f"Sum of duplicates: {master_df.duplicated().sum()}")''') 
   st.write('Sum of duplicates: 255')
