@@ -303,7 +303,7 @@ Data includes the following fields:''')
     ''')
     st.write("By using RFM analysis and Kmeans clustering algorithm on these 3 features, I expect to defferentiate customer groups' behaviors and values.")
 
-elif choice = 'EDA & Preprocessing':
+elif choice == 'EDA & Preprocessing':
   st.write('## EDA & Preprocessing')
   '---'
   st.write('### I. Exploratory Data Analysis (EDA)')
