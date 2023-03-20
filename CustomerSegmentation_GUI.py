@@ -281,17 +281,16 @@ communications, or designs according to customer segments, thereby improving the
 including 69,659 transactions (observations) made by 23,570 customers.
 
 Data includes the following fields:''')
-    col1, col2 = st.columns(2)
+    col1, col2 = st.columns([3,1])
     with col1:
+      CDnow_Master = load_csv_df('CDnow_MasterData.csv')
+      st.dataframe(CDnow_Master.head())
+    with col2:
       st.write('''
       - Customer ID
       - Date of transaction
       - The number of CDs purchased
       - The dollar value of the transaction.''')
-    with col2:
-      CDnow_Master = load_csv_df('CDnow_MasterData.csv')
-      st.dataframe(CDnow_Master.head())
-   
     st.download_button(label = "Download Data", data = CDnow_Master.to_csv(index=False), 
                         file_name = 'CDnow_MasterData.csv', mime = 'text/csv')
     
