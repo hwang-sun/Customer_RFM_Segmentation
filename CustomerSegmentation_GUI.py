@@ -404,7 +404,7 @@ plt.ylabel('Sale', fontsize = 12)
 
 plt.show();
      ''')
-     st.image('image/EDA_line.png)
+     st.image('image/EDA_line.png')
   
   elif eda_choice == 'purchased_quantity & sale':
      st.image('image/EDA_dist.png')          
