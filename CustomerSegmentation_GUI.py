@@ -308,15 +308,8 @@ elif choice == 'EDA & Preprocessing':
   '---'
   st.write('### I. Exploratory Data Analysis (EDA)')
   st.write("Let's take a look at the general information about the data set")
-  st.code('master_df.info()')
-  st.write(''' 
- #   Column              Non-Null Count  Dtype         
----  ------              --------------  -----         
- 0   customer_id         69659 non-null  object        
- 1   date                69659 non-null  datetime64[ns]
- 2   purchased_quantity  69659 non-null  int32         
- 3   sale                69659 non-null  float64  
-  ''')
+  st.code('master_df.shape')
+  st.write('Result: (69659, 4)')
   st.code(''' 
 def missing_value(df):
     columns = df.columns.values.tolist()
@@ -337,8 +330,40 @@ Result:
   ''')
   st.code(''' print(f"Sum of duplicates: {master_df.duplicated().sum()}")''') 
   st.write('Sum of duplicates: 255')
-  
-  
+  st.code("print(f'master_df spans from {master_df.date.min()} to {master_df.date.max()}')")
+  st.write('master_df spans from 1997-01-01 00:00:00 to 1998-06-30 00:00:00')
+  st.write(''' 
+My goal in this section was to transform data into Recency, Frequency, and Monetary Value features for RFM analysis.
+In order to do that, I performed feature engineering and created order_od. The idea was that the same order_id will be
+assigned for any transaction (observation) have the same customer_id and purchased date.
+  ''')
+  st.code(''' 
+# Get index and assign order_id for any transcations have the same customer_id and date
+df_new = master_df.copy(deep=True)
+df_new['order_id'] = 0
+
+duplicate_idx = []
+
+for index, col in duplicated.iterrows():
+    data = df_new[(df_new['customer_id'] == col['customer_id'])
+                  & (df_new['date'] == col['date'])]
+    
+    if data.shape[0] > 0:
+        duplicate_idx.append(data.index)
+k = 1
+for i in duplicate_idx:
+    df_new.loc[i, 'order_id'] = k
+    k += 1
+    
+# Get index and assign order_id for any transcations have different customer_id and date
+duplicate_idx = df_new[df_new[['customer_id', 'date']].duplicated(keep=False)]['order_id'].index
+nondub_idx = df_new.drop(index = duplicate_idx, axis = 0).index
+
+k = 2069
+for n in nondub_idx:
+    df_new.loc[n, 'order_id'] = k
+    k+=1
+  ''')
   
   
   
