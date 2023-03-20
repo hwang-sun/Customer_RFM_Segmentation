@@ -438,7 +438,7 @@ std = master_df.groupby('customer_id')['order_id'].nunique().std()
     st.write(''' 
 On average, a customer purchased 2.87 times, with standard deviation equal to 4.17
     ''')
-     st.code(''' 
+    st.code(''' 
 # show the most frequent and the most spent customers
 top10_frequency = master_df.groupby('customer_id')['order_id'].nunique().sort_values(ascending=False)[:10]
 top10_sale = master_df.groupby('customer_id')['sale'].sum().sort_values(ascending=False)[:10]
