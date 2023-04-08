@@ -301,50 +301,7 @@ Data includes the following fields:''')
 - Frequency: The number of times a customer has made a purchase.
 - Monetary value: The total amount of money a customer has spent on purchases.
     ''')
-    st.write("By using RFM analysis and Kmeans clustering algorithm on these 3 features, I expect to defferentiate customer groups' behaviors and values.")
-          
-  elif eda_choice == 'customer_id & order_id':
-    st.code(''' 
-# On average, how many times does a customer make a purchase?
-mean = master_df.groupby('customer_id')['order_id'].nunique().mean()
-std = master_df.groupby('customer_id')['order_id'].nunique().std()
-    ''')
-    st.write(''' 
-On average, a customer purchased 2.87 times, with standard deviation equal to 4.17
-    ''')
-    st.code(''' 
-# show the most frequent and the most spent customers
-top10_frequency = master_df.groupby('customer_id')['order_id'].nunique().sort_values(ascending=False)[:10]
-top10_sale = master_df.groupby('customer_id')['sale'].sum().sort_values(ascending=False)[:10]
-
-fig = plt.figure(figsize = (15, 10))
-plt.subplot(1,2,1)
-ax1 = sns.barplot(data = top10_frequency, 
-                    x=top10_frequency.index, y=top10_frequency.values.tolist(), 
-                    palette = 'Blues',
-                   orient = 'h')
-ax1.set_title('Top 10 Frequent Customers', fontsize = 18)
-yticks = top10_frequency.sort_values().index.tolist()
-ax1.set_yticklabels(yticks, fontsize = 12)
-ax1.set_xlabel('Purchased times', fontsize = 15)
-plt.setp(ax1.get_xticklabels(), fontsize = 12)
-
-plt.subplot(1,2,2)
-ax2 = sns.barplot(top10_sale, 
-                  x=top10_sale.index, y = top10_sale.values.tolist(), 
-                  orient = 'h', palette = 'Oranges')
-ax2.set_title('Top 10 Most-spent Customers', fontsize = 18)
-yticks = top10_sale.sort_values().index.tolist()
-ax2.set_yticklabels(yticks, fontsize = 12)
-ax2.set_xlabel('Sale', fontsize = 15)
-plt.setp(ax2.get_xticklabels(), fontsize = 12)
-
-plt.show();
-     ''')
-    st.image('image/EDA_two_bar.png')
-
-    
-    
+    st.write("By using RFM analysis and Kmeans clustering algorithm on these 3 features, I expect to defferentiate customer groups' behaviors and values.") 
     
 elif choice == 'RFM Analysis':
     st.write("## RFM Analysis")
