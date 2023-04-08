@@ -245,9 +245,9 @@ st.title('Customer Segmentation Project')
 #create a navigation menu
 with st.sidebar:
   choice = option_menu(
-      options = ['Introduction', 'EDA & Preprocessing', 'RFM Analysis','Kmeans Clustering', 'New Prediction'],
+      options = ['Introduction', 'RFM Analysis','Kmeans Clustering', 'New Prediction'],
       menu_title = 'Main Menu',
-      icons = ['bullseye', 'file-code', 'bar-chart', 'robot', 'file-plus'],
+      icons = ['bullseye', 'bar-chart', 'robot', 'file-plus'],
       menu_icon = [None])
 
 if choice == "Introduction":
@@ -302,133 +302,7 @@ Data includes the following fields:''')
 - Monetary value: The total amount of money a customer has spent on purchases.
     ''')
     st.write("By using RFM analysis and Kmeans clustering algorithm on these 3 features, I expect to defferentiate customer groups' behaviors and values.")
-
-elif choice == 'EDA & Preprocessing':
-  st.write('## EDA & Preprocessing')
-  '---'
-  st.write('### I. Exploratory Data Analysis (EDA)')
-  st.write("Let's take a look at the general information about the data set")
-  st.code('master_df.shape')
-  st.write('Result: (69659, 4)')
-  st.code(''' 
-def missing_value(df):
-    columns = df.columns.values.tolist()
-    for i in columns:
-        s = df[i].isnull().sum()
-        if s > 0:
-            print(f"'{i}' has missing values: {s}")
-        else:
-            print(f"'{i}' has no missing values")
-
-missing_value(master_df)''')
-  st.write(''' 
-Result:
-  - 'customer_id' has no missing values
-  - 'date' has no missing values
-  - 'purchased_quantity' has no missing values
-  - 'sale' has no missing values
-  ''')
-  st.code(''' print(f"Sum of duplicates: {master_df.duplicated().sum()}")''') 
-  st.write('Sum of duplicates: 255')
-  st.code("print(f'master_df spans from {master_df.date.min()} to {master_df.date.max()}')")
-  st.write('master_df spans from 1997-01-01 00:00:00 to 1998-06-30 00:00:00')
-  st.write(''' 
-My goal in this section was to transform data into Recency, Frequency, and Monetary Value features for RFM analysis.
-In order to do that, I performed feature engineering and created order_id. The idea was that the same order_id will be
-assigned for any transaction (observation) have the same customer_id and purchased date.
-  ''')
-  st.code(''' 
-# Get index and assign order_id for any transcations have the same customer_id and date
-df_new = master_df.copy(deep=True)
-df_new['order_id'] = 0
-
-duplicate_idx = []
-
-for index, col in duplicated.iterrows():
-    data = df_new[(df_new['customer_id'] == col['customer_id'])
-                  & (df_new['date'] == col['date'])]
-    
-    if data.shape[0] > 0:
-        duplicate_idx.append(data.index)
-k = 1
-for i in duplicate_idx:
-    df_new.loc[i, 'order_id'] = k
-    k += 1
-    
-# Get index and assign order_id for any transcations have different customer_id and date
-duplicate_idx = df_new[df_new[['customer_id', 'date']].duplicated(keep=False)]['order_id'].index
-nondub_idx = df_new.drop(index = duplicate_idx, axis = 0).index
-
-k = 2069
-for n in nondub_idx:
-    df_new.loc[n, 'order_id'] = k
-    k+=1
-  ''')
-  '---'
-  st.write('''Now I start exploring data set variables''')
-  eda_choice = st.radio(
-    'Choose variable to observe',
-     ['date & sale', 'purchased_quantity & sale', 'customer_id & order_id']
-    )  
-  if eda_choice == 'date & sale':
-     st.code(''' 
-# sale of 2 years
-master_df['year'] = master_df.date.apply(lambda x: x.year)
-master_df['month'] = master_df.date.apply(lambda x: x.month)
-
-year_sale = pd.DataFrame({'year': [1997, 1998],
-                         'Total_sale': [round(master_df[master_df['year'] == 1997]['sale'].sum(), 2),
-                                       round(master_df[master_df['year'] == 1998]['sale'].sum(),2)]})
-plt.style.use('seaborn-whitegrid')
-fig = plt.figure(figsize = (10, 6))
-sns.barplot(data = year_sale, x='year', y='Total_sale')
-plt.title('Total sale between years', fontsize=15)
-plt.xlabel('Year', fontsize=12)
-plt.ylabel('Sale', fontsize = 12)
-plt.show();
-     ''')
-     st.image('image/EDA_bar.png')
-     st.code(''' 
-fig = plt.figure(figsize = (20, 6))
-
-plt.subplot(1,2,1)
-sns.lineplot(data = master_df[master_df['year'] == 1997], x='month', y='sale')
-plt.title('change of sale over month in 1997', fontsize=20)
-plt.xlabel('Month', fontsize=12)
-plt.ylabel('Sale', fontsize = 12)
-
-plt.subplot(1,2,2)
-sns.lineplot(data = master_df[master_df['year'] == 1998], x='month', y='sale')
-plt.title('change of sale over month in 1998', fontsize=20)
-plt.xlabel('Month', fontsize=12)
-plt.ylabel('Sale', fontsize = 12)
-
-plt.show();
-     ''')
-      
-     st.image('image/EDA_line.png')
-  
-  elif eda_choice == 'purchased_quantity & sale':
-     st.code('''
-# show distribution of both variables
-fig = plt.figure(figsize = (12, 5))
-plt.subplot(1,2,1)
-sns.histplot(master_df.purchased_quantity, bins=10, kde=True)
-plt.title('Purchased_Quantity Distribution', fontsize = 15)
-
-plt.subplot(1,2,2)
-sns.histplot(master_df.sale, kde=True)
-plt.title('Sale Distribution', fontsize = 15)
-
-plt.show();
-     ''')
-     st.image('image/EDA_dist.png')          
-              
-              
-              
-              
-              
-              
+          
   elif eda_choice == 'customer_id & order_id':
     st.code(''' 
 # On average, how many times does a customer make a purchase?
